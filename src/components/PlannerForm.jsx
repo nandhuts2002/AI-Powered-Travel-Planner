@@ -37,7 +37,7 @@ const INTERESTS = [
   { id: 'Nightlife', label: '✨ Nightlife & Social' }
 ];
 
-export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
+export default function PlannerForm({ onGenerate, isGenerating }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     destination: '',
@@ -167,7 +167,7 @@ export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
                     style={{
                       ...styles.optionCard,
                       borderColor: formData.companion === comp.id ? 'var(--accent-primary)' : 'var(--border-color)',
-                      backgroundColor: formData.companion === comp.id ? 'var(--accent-light)' : 'rgba(0, 0, 0, 0.1)'
+                      backgroundColor: formData.companion === comp.id ? 'var(--accent-light)' : 'var(--bg-primary)'
                     }}
                   >
                     <div style={styles.cardHeader}>
@@ -189,7 +189,7 @@ export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
                     style={{
                       ...styles.optionCard,
                       borderColor: formData.budget === b.id ? 'var(--accent-primary)' : 'var(--border-color)',
-                      backgroundColor: formData.budget === b.id ? 'var(--accent-light)' : 'rgba(0, 0, 0, 0.1)'
+                      backgroundColor: formData.budget === b.id ? 'var(--accent-light)' : 'var(--bg-primary)'
                     }}
                   >
                     <div style={styles.cardHeader}>
@@ -220,7 +220,7 @@ export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
                     style={{
                       ...styles.interestTag,
                       borderColor: selected ? 'var(--accent-primary)' : 'var(--border-color)',
-                      backgroundColor: selected ? 'var(--accent-light)' : 'rgba(0, 0, 0, 0.15)',
+                      backgroundColor: selected ? 'var(--accent-light)' : 'var(--bg-primary)',
                       color: selected ? 'var(--accent-primary)' : 'var(--text-primary)'
                     }}
                   >
@@ -229,15 +229,6 @@ export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
                 );
               })}
             </div>
-
-            {!hasApiKey && (
-              <div style={styles.apiKeyWarn}>
-                <AlertCircle size={18} color="var(--status-warning)" />
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                  A valid Gemini API Key is required to generate itineraries. Click the key icon in the top right to configure it.
-                </span>
-              </div>
-            )}
           </div>
         )}
 
@@ -264,12 +255,12 @@ export default function PlannerForm({ onGenerate, isGenerating, hasApiKey }) {
           ) : (
             <button
               type="submit"
-              disabled={isGenerating || !hasApiKey}
+              disabled={isGenerating}
               className="btn btn-primary animate-pulse"
               style={{
-                background: 'linear-gradient(135deg, var(--accent-secondary) 0%, #4338ca 100%)',
-                opacity: (isGenerating || !hasApiKey) ? 0.6 : 1,
-                cursor: (isGenerating || !hasApiKey) ? 'not-allowed' : 'pointer'
+                background: 'linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%)',
+                opacity: isGenerating ? 0.6 : 1,
+                cursor: isGenerating ? 'not-allowed' : 'pointer'
               }}
             >
               {isGenerating ? (
@@ -359,7 +350,7 @@ const styles = {
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: '#0f172a',
+    backgroundColor: 'var(--bg-secondary)',
     border: '1px solid var(--border-color)',
     borderRadius: 'var(--radius-sm)',
     marginTop: '0.25rem',
