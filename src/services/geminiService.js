@@ -123,16 +123,6 @@ export async function generateItinerary({ destination, duration, budget, compani
 
   const genAI = new GoogleGenerativeAI(apiKey);
   
-  // Use gemini-2.5-flash for fast and cost-effective structured JSON generation
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: ITINERARY_SCHEMA,
-      temperature: 0.3, // Low temperature for factual, reliable location plotting
-    }
-  });
-
   const prompt = `
     Generate a detailed, highly accurate, and customized ${duration}-day travel itinerary for a trip to "${destination}".
     
@@ -151,16 +141,39 @@ export async function generateItinerary({ destination, duration, budget, compani
     7. Provide 4 helpful practical tips (packing, safety, cultural etiquette) specific to ${destination}.
   `;
 
-  try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    // Parse response
-    const itineraryData = JSON.parse(text);
-    return itineraryData;
-  } catch (error) {
-    console.error("Gemini Generation Error:", error);
-    throw new Error(error.message || "Failed to generate itinerary. Please verify your API key and check your connection.");
+  // Try models in order of preference to safeguard against 503 high demand spikes
+  const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"];
+  let lastError = null;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`Attempting generation with Gemini model: ${modelName}`);
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: ITINERARY_SCHEMA,
+          temperature: 0.3, // Low temperature for factual, reliable location plotting
+        }
+      });
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      
+      // Parse and return the structured response
+      const itineraryData = JSON.parse(text);
+      return itineraryData;
+    } catch (error) {
+      console.warn(`Gemini Model ${modelName} failed:`, error);
+      lastError = error;
+      // Continue to fallback model
+    }
   }
+
+  // If both models fail, throw the last received error
+  console.error("All Gemini models failed to generate content:", lastError);
+  throw new Error(
+    lastError?.message || "Failed to generate itinerary. Please check your API key or try again later."
+  );
 }
