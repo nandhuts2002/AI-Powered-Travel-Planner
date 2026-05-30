@@ -101,3 +101,6 @@ dist-ssr/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Vite cache
+.vite/
