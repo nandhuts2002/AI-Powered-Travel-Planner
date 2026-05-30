@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Compass, Sparkles, Key, Sun, Moon, AlertTriangle, Map, CloudSun, Utensils } from 'lucide-react';
 import PlannerForm from './components/PlannerForm';
 import ItineraryView from './components/ItineraryView';
-import KeySettings from './components/KeySettings';
 import { generateItinerary } from './services/geminiService';
 
 export default function App() {
   const [theme, setTheme] = useState('dark');
   const [apiKey, setApiKey] = useState('');
-  const [isKeyDrawerOpen, setIsKeyDrawerOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
   const [itinerary, setItinerary] = useState(null);
@@ -33,15 +31,6 @@ export default function App() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  const handleSaveKey = (newKey) => {
-    setApiKey(newKey);
-    if (newKey) {
-      localStorage.setItem('gemini_api_key', newKey);
-    } else {
-      localStorage.removeItem('gemini_api_key');
-    }
-  };
-
   const handleGenerate = async (formData) => {
     setIsGenerating(true);
     setError('');
@@ -62,55 +51,29 @@ export default function App() {
 
   return (
     <div style={styles.app}>
+      {/* Background gradient blobs */}
+      <div className="bg-blob blob-1"></div>
+      <div className="bg-blob blob-2"></div>
+      <div className="bg-blob blob-3"></div>
+
       {/* Header navbar */}
       <header style={styles.header} className="glass-panel no-print">
         <div style={styles.logoRow}>
           <div style={styles.logoCircle}>
             <Compass size={20} color="var(--accent-primary)" />
           </div>
-          <span style={styles.logoText}>RoamAI</span>
+          <span style={styles.logoText} className="text-gradient">RoamAI</span>
           <span style={styles.logoVersion}>v1.0</span>
         </div>
 
         <div style={styles.navActions}>
-          <button 
-            onClick={() => setIsKeyDrawerOpen(true)} 
-            style={{
-              ...styles.navBtn,
-              borderColor: apiKey ? 'var(--status-success)' : 'var(--status-warning)'
-            }}
-            title={apiKey ? "API Key Configured" : "Add API Key"}
-          >
-            <Key size={16} color={apiKey ? 'var(--status-success)' : 'var(--status-warning)'} />
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
-              {apiKey ? 'API Connected' : 'Configure Key'}
-            </span>
-          </button>
-
-          <button onClick={toggleTheme} style={styles.iconBtn}>
+          <button onClick={toggleTheme} className="icon-btn" title="Toggle Theme">
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
       </header>
 
-      {/* Main workspace container */}
       <main style={styles.main}>
-        {!apiKey && (
-          <div style={styles.setupAlert} className="glass-panel no-print">
-            <div style={styles.alertContent}>
-              <AlertTriangle size={24} color="var(--status-warning)" />
-              <div>
-                <h4 style={{ margin: 0, color: 'var(--text-primary)' }}>API Connection Required</h4>
-                <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  A Google Gemini API key is required to use this application. Please click "Configure Key" to connect your API.
-                </p>
-              </div>
-            </div>
-            <button onClick={() => setIsKeyDrawerOpen(true)} className="btn btn-primary">
-              Setup API Key
-            </button>
-          </div>
-        )}
 
         {error && (
           <div style={styles.errorAlert} className="glass-panel animate-fade-in-up">
@@ -132,7 +95,6 @@ export default function App() {
             <PlannerForm
               onGenerate={handleGenerate}
               isGenerating={isGenerating}
-              hasApiKey={!!apiKey}
             />
           </div>
 
@@ -159,7 +121,7 @@ export default function App() {
                 <div style={styles.heroCircle}>
                   <Sparkles size={32} color="var(--accent-primary)" />
                 </div>
-                <h1 style={styles.heroTitle}>Your AI Travel Companion</h1>
+                <h1 style={styles.heroTitle} className="text-gradient">Your AI Travel Companion</h1>
                 <p style={styles.heroSubtitle}>
                   Design a fully customized, day-by-day travel plan. Specify your destination, trip length, companion style, and interests to generate accommodations, maps, weather forecasts, and dining coordinates instantly.
                 </p>
@@ -193,13 +155,6 @@ export default function App() {
         </div>
       </main>
 
-      {/* API Key Modal Drawer */}
-      <KeySettings
-        isOpen={isKeyDrawerOpen}
-        onClose={() => setIsKeyDrawerOpen(false)}
-        onSaveKey={handleSaveKey}
-        currentKey={apiKey}
-      />
     </div>
   );
 }
@@ -215,8 +170,8 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1rem 2rem',
-    margin: '1rem 1rem 0 1rem',
-    borderRadius: 'var(--radius-md) !important',
+    margin: '1.5rem 1.5rem 0 1.5rem',
+    borderRadius: 'var(--radius-lg) !important',
   },
   logoRow: {
     display: 'flex',
@@ -266,7 +221,7 @@ const styles = {
     width: '36px',
     height: '36px',
     borderRadius: '50%',
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: 'transparent',
     border: '1px solid var(--border-color)',
     color: 'var(--text-primary)',
     display: 'flex',
