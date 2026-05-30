@@ -85,7 +85,7 @@ export default function ItineraryView({ itinerary }) {
         <div style={styles.overviewMain}>
           <div>
             <span style={styles.badge}>Generated Itinerary</span>
-            <h1 style={styles.title}>{itinerary.destination}</h1>
+            <h1 style={styles.title} className="text-gradient">{itinerary.destination}</h1>
             <p style={styles.desc}>{itinerary.description}</p>
           </div>
           
@@ -158,41 +158,25 @@ export default function ItineraryView({ itinerary }) {
       <div style={styles.tabs} className="no-print">
         <button
           onClick={() => setActiveTab('schedule')}
-          style={{
-            ...styles.tabBtn,
-            borderColor: activeTab === 'schedule' ? 'var(--accent-primary)' : 'transparent',
-            color: activeTab === 'schedule' ? 'var(--accent-primary)' : 'var(--text-secondary)'
-          }}
+          className={`tab-btn ${activeTab === 'schedule' ? 'active' : ''}`}
         >
           <Calendar size={16} /> Schedule
         </button>
         <button
           onClick={() => setActiveTab('stays')}
-          style={{
-            ...styles.tabBtn,
-            borderColor: activeTab === 'stays' ? 'var(--accent-primary)' : 'transparent',
-            color: activeTab === 'stays' ? 'var(--accent-primary)' : 'var(--text-secondary)'
-          }}
+          className={`tab-btn ${activeTab === 'stays' ? 'active' : ''}`}
         >
           <Hotel size={16} /> Recommended Stays
         </button>
         <button
           onClick={() => setActiveTab('food')}
-          style={{
-            ...styles.tabBtn,
-            borderColor: activeTab === 'food' ? 'var(--accent-primary)' : 'transparent',
-            color: activeTab === 'food' ? 'var(--accent-primary)' : 'var(--text-secondary)'
-          }}
+          className={`tab-btn ${activeTab === 'food' ? 'active' : ''}`}
         >
           <Coffee size={16} /> Cuisine & Drinks
         </button>
         <button
           onClick={() => setActiveTab('budget')}
-          style={{
-            ...styles.tabBtn,
-            borderColor: activeTab === 'budget' ? 'var(--accent-primary)' : 'transparent',
-            color: activeTab === 'budget' ? 'var(--accent-primary)' : 'var(--text-secondary)'
-          }}
+          className={`tab-btn ${activeTab === 'budget' ? 'active' : ''}`}
         >
           <DollarSign size={16} /> Budget & Tips
         </button>
@@ -219,7 +203,7 @@ export default function ItineraryView({ itinerary }) {
                   onClick={() => setActiveDay(day.dayNumber)}
                   style={{
                     ...styles.dayBtn,
-                    backgroundColor: activeDay === day.dayNumber ? 'var(--accent-primary)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: activeDay === day.dayNumber ? 'var(--accent-primary)' : 'var(--bg-primary)',
                     color: activeDay === day.dayNumber ? '#fff' : 'var(--text-primary)',
                     borderColor: activeDay === day.dayNumber ? 'var(--accent-primary)' : 'var(--border-color)',
                   }}
@@ -300,7 +284,7 @@ export default function ItineraryView({ itinerary }) {
                 <div style={styles.foodHeader}>
                   <span style={{
                     ...styles.foodTypeBadge,
-                    backgroundColor: food.type.toLowerCase() === 'drink' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                    backgroundColor: food.type.toLowerCase() === 'drink' ? 'var(--accent-light)' : 'rgba(180, 83, 9, 0.1)',
                     color: food.type.toLowerCase() === 'drink' ? 'var(--accent-secondary)' : 'var(--accent-tertiary)',
                   }}>
                     {food.type}
@@ -538,7 +522,7 @@ const styles = {
     maxWidth: '550px'
   },
   weatherWidget: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--border-color)',
     borderRadius: 'var(--radius-md)',
     padding: '1rem',
@@ -724,7 +708,7 @@ const styles = {
   },
   costBadge: {
     fontSize: '0.75rem',
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--border-color)',
     padding: '0.15rem 0.5rem',
     borderRadius: '4px',
@@ -969,7 +953,7 @@ if (typeof document !== 'undefined') {
       }
       .print-title {
         font-size: 26px !important;
-        font-family: 'Outfit', sans-serif !important;
+        font-family: 'Playfair Display', Georgia, serif !important;
         color: #0f172a !important;
         margin: 0 0 5px 0 !important;
         font-weight: 800 !important;
