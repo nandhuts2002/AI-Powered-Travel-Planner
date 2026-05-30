@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, Sparkles, Key, Sun, Moon, AlertTriangle } from 'lucide-react';
+import { Compass, Sparkles, Key, Sun, Moon, AlertTriangle, Map, CloudSun, Utensils } from 'lucide-react';
 import PlannerForm from './components/PlannerForm';
 import ItineraryView from './components/ItineraryView';
 import KeySettings from './components/KeySettings';
@@ -66,7 +66,7 @@ export default function App() {
       <header style={styles.header} className="glass-panel no-print">
         <div style={styles.logoRow}>
           <div style={styles.logoCircle}>
-            <Compass size={24} color="#fff" />
+            <Compass size={20} color="var(--accent-primary)" />
           </div>
           <span style={styles.logoText}>RoamAI</span>
           <span style={styles.logoVersion}>v1.0</span>
@@ -157,7 +157,7 @@ export default function App() {
             ) : (
               <div style={styles.welcomeHero} className="glass-panel animate-fade-in-up">
                 <div style={styles.heroCircle}>
-                  <Sparkles size={48} color="var(--accent-primary)" />
+                  <Sparkles size={32} color="var(--accent-primary)" />
                 </div>
                 <h1 style={styles.heroTitle}>Your AI Travel Companion</h1>
                 <p style={styles.heroSubtitle}>
@@ -166,17 +166,23 @@ export default function App() {
                 
                 <div style={styles.featureGrid}>
                   <div style={styles.featCard}>
-                    <div style={styles.featIcon}>🗺️</div>
+                    <div style={styles.featIcon}>
+                      <Map size={24} color="var(--accent-primary)" />
+                    </div>
                     <h4 style={styles.featTitle}>Interactive Maps</h4>
                     <p style={styles.featText}>Plotted coordinates show exact pins for accommodations and activities.</p>
                   </div>
                   <div style={styles.featCard}>
-                    <div style={styles.featIcon}>🌦️</div>
+                    <div style={styles.featIcon}>
+                      <CloudSun size={24} color="var(--accent-primary)" />
+                    </div>
                     <h4 style={styles.featTitle}>Live Weather</h4>
                     <p style={styles.featText}>Real-time weather forecast details using latitude and longitude coordinates.</p>
                   </div>
                   <div style={styles.featCard}>
-                    <div style={styles.featIcon}>🍜</div>
+                    <div style={styles.featIcon}>
+                      <Utensils size={24} color="var(--accent-primary)" />
+                    </div>
                     <h4 style={styles.featTitle}>Local Cuisines</h4>
                     <p style={styles.featText}>Suggested local dishes, beverages, and the best places to try them.</p>
                   </div>
@@ -218,14 +224,13 @@ const styles = {
     gap: '0.75rem',
   },
   logoCircle: {
-    width: '36px',
-    height: '36px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--accent-primary)',
+    width: '32px',
+    height: '32px',
+    borderRadius: 'var(--radius-sm)',
+    backgroundColor: 'var(--accent-light)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 2px 10px rgba(16, 185, 129, 0.4)'
+    justifyContent: 'center'
   },
   logoText: {
     fontSize: '1.25rem',
@@ -359,15 +364,14 @@ const styles = {
     textAlign: 'center',
   },
   heroCircle: {
-    width: '96px',
-    height: '96px',
-    borderRadius: '50%',
+    width: '64px',
+    height: '64px',
+    borderRadius: 'var(--radius-md)',
     backgroundColor: 'var(--accent-light)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '2rem',
-    animation: 'pulseGlow 3s infinite ease-in-out'
+    marginBottom: '1.5rem',
   },
   heroTitle: {
     fontSize: '2.5rem',
