@@ -350,11 +350,11 @@ const styles = {
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: 'var(--bg-secondary)',
+    backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--border-color)',
     borderRadius: 'var(--radius-sm)',
     marginTop: '0.25rem',
-    zIndex: 10,
+    zIndex: 50,
     boxShadow: 'var(--shadow-lg)',
     maxHeight: '200px',
     overflowY: 'auto'

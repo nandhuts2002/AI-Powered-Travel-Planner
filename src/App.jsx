@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, Sparkles, Key, Sun, Moon, AlertTriangle, Map, CloudSun, Utensils } from 'lucide-react';
+import { Compass, Sparkles, Key, Sun, Moon, AlertTriangle, Map, CloudSun, Utensils, Mic, AudioLines, ArrowUp, Plus, Send, ArrowUpRight, Home } from 'lucide-react';
 import PlannerForm from './components/PlannerForm';
 import ItineraryView from './components/ItineraryView';
 import { generateItinerary } from './services/geminiService';
@@ -10,6 +10,7 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
   const [itinerary, setItinerary] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Initialize API Key from env or localStorage
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function App() {
   };
 
   const handleGenerate = async (formData) => {
+    setIsModalOpen(false);
     setIsGenerating(true);
     setError('');
     
@@ -50,30 +52,28 @@ export default function App() {
   };
 
   return (
-    <div style={styles.app}>
-      {/* Background gradient blobs */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
-      <div className="bg-blob blob-3"></div>
+    <div style={styles.app} className="hero-wrapper">
+      {/* Universal Background */}
+      <img src="/hero_bg.png" alt="Hero Background" className="hero-bg" />
+      <div className="hero-overlay"></div>
 
-      {/* Header navbar */}
-      <header style={styles.header} className="glass-panel no-print">
-        <div style={styles.logoRow}>
-          <div style={styles.logoCircle}>
-            <Compass size={20} color="var(--accent-primary)" />
+      {/* Universal Header */}
+      <header className="glass-header no-print animate-fade-in-up" style={{ padding: '1.5rem 3rem', background: 'transparent', border: 'none', boxShadow: 'none' }}>
+        <div style={{...styles.logoRow, cursor: 'pointer'}} onClick={() => { setItinerary(null); setIsGenerating(false); }}>
+          <div style={{...styles.logoCircle, background: 'rgba(255,255,255,0.2)'}}>
+            <Compass size={20} color="#fff" />
           </div>
-          <span style={styles.logoText} className="text-gradient">RoamAI</span>
-          <span style={styles.logoVersion}>v1.0</span>
+          <span style={{...styles.logoText, color: '#fff', fontSize: '1.5rem'}}>RoamAI</span>
         </div>
 
-        <div style={styles.navActions}>
-          <button onClick={toggleTheme} className="icon-btn" title="Toggle Theme">
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        {(itinerary || isGenerating) && (
+          <button className="btn-glass" onClick={() => { setItinerary(null); setIsGenerating(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Home size={16} /> Home
           </button>
-        </div>
+        )}
       </header>
 
-      <main style={styles.main}>
+      <main style={{...styles.main, display: 'flex', flexDirection: 'column'}}>
 
         {error && (
           <div style={styles.errorAlert} className="glass-panel animate-fade-in-up">
@@ -89,70 +89,70 @@ export default function App() {
           </div>
         )}
 
-        <div style={styles.dashboardGrid}>
-          {/* Left panel form */}
-          <div style={styles.sidebarCol} className="no-print">
-            <PlannerForm
-              onGenerate={handleGenerate}
-              isGenerating={isGenerating}
-            />
-          </div>
+        {!itinerary && !isGenerating ? (
+          <div className="hero-content animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="hero-left">
+              <div className="hero-badge">
+                <Sparkles size={14} /> I'll design a trip for you.
+              </div>
+              <h1 className="hero-title">Hey I'm RoamAI, your AI trip planner</h1>
+              <button className="btn-hero" onClick={() => setIsModalOpen(true)}>
+                Plan Your Trip <ArrowUpRight size={20} />
+              </button>
+            </div>
 
-          {/* Right panel itinerary view */}
-          <div style={styles.contentCol}>
-            {isGenerating ? (
-              <div style={styles.loadingContainer} className="glass-panel">
-                <div className="loader-ring" />
-                <h2 style={styles.loadingTitle}>Generating Itinerary</h2>
-                <p style={styles.loadingSubtitle}>
-                  Consulting Gemini to design the ultimate schedule, local cuisine lists, and route maps...
-                </p>
-                <div style={styles.loadingTips}>
-                  <Sparkles size={16} color="var(--accent-primary)" />
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Tip: Leaflet coordinates are being plotted to create interactive maps.
-                  </span>
-                </div>
+            <div className="teaser-card">
+              <div className="teaser-badge">Trips Planned</div>
+              <img src="/resort_thumb.png" alt="Tropical Resort" className="teaser-img" />
+              <div className="teaser-title">Your trip in minutes, not weeks.</div>
+              <div className="teaser-desc">Plan your next trip with me and discover the world's hidden gems.</div>
+              <div className="teaser-actions">
+                <button className="btn-teaser" onClick={() => setIsModalOpen(true)}>
+                  <Send size={14} /> Plan my trip
+                </button>
+                <button className="btn-icon-teaser" onClick={() => setIsModalOpen(true)}>
+                  <Compass size={14} />
+                </button>
               </div>
-            ) : itinerary ? (
-              <ItineraryView itinerary={itinerary} />
-            ) : (
-              <div style={styles.welcomeHero} className="glass-panel animate-fade-in-up">
-                <div style={styles.heroCircle}>
-                  <Sparkles size={32} color="var(--accent-primary)" />
-                </div>
-                <h1 style={styles.heroTitle} className="text-gradient">Your AI Travel Companion</h1>
-                <p style={styles.heroSubtitle}>
-                  Design a fully customized, day-by-day travel plan. Specify your destination, trip length, companion style, and interests to generate accommodations, maps, weather forecasts, and dining coordinates instantly.
-                </p>
-                
-                <div style={styles.featureGrid}>
-                  <div style={styles.featCard}>
-                    <div style={styles.featIcon}>
-                      <Map size={24} color="var(--accent-primary)" />
-                    </div>
-                    <h4 style={styles.featTitle}>Interactive Maps</h4>
-                    <p style={styles.featText}>Plotted coordinates show exact pins for accommodations and activities.</p>
-                  </div>
-                  <div style={styles.featCard}>
-                    <div style={styles.featIcon}>
-                      <CloudSun size={24} color="var(--accent-primary)" />
-                    </div>
-                    <h4 style={styles.featTitle}>Live Weather</h4>
-                    <p style={styles.featText}>Real-time weather forecast details using latitude and longitude coordinates.</p>
-                  </div>
-                  <div style={styles.featCard}>
-                    <div style={styles.featIcon}>
-                      <Utensils size={24} color="var(--accent-primary)" />
-                    </div>
-                    <h4 style={styles.featTitle}>Local Cuisines</h4>
-                    <p style={styles.featText}>Suggested local dishes, beverages, and the best places to try them.</p>
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
+        ) : isGenerating ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, padding: '2rem' }}>
+            <div style={{...styles.loadingContainer, background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '24px', maxWidth: '500px', width: '100%' }} className="glass-panel animate-fade-in-up">
+              <div className="loader-ring" style={{ borderColor: 'rgba(255,255,255,0.2)', borderTopColor: '#fff', width: '60px', height: '60px', borderWidth: '4px' }} />
+              <h2 style={{...styles.loadingTitle, color: '#fff', marginTop: '1rem'}}>Generating Itinerary</h2>
+              <p style={{...styles.loadingSubtitle, color: 'rgba(255,255,255,0.8)'}}>
+                Consulting Gemini to design the ultimate schedule, local cuisine lists, and route maps...
+              </p>
+              <div style={{...styles.loadingTips, background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)'}}>
+                <Sparkles size={16} color="#fff" />
+                <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.9)' }}>
+                  Tip: Leaflet coordinates are being plotted to create interactive maps.
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="animate-fade-in-up" style={{ padding: '0 2rem 2rem 2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', flex: 1 }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <h2 style={{ color: '#fff', margin: 0, textShadow: '0 2px 10px rgba(0,0,0,0.5)', fontFamily: 'var(--font-display)' }}>Your Itinerary is Ready</h2>
+               <button className="btn-hero" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }} onClick={() => setIsModalOpen(true)}>
+                 Plan Another Trip <ArrowUpRight size={16} />
+               </button>
+             </div>
+             <ItineraryView itinerary={itinerary} />
+          </div>
+        )}
+
+        {/* Modal for PlannerForm */}
+        {isModalOpen && (
+          <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
+              <PlannerForm onGenerate={handleGenerate} isGenerating={isGenerating} />
+            </div>
+          </div>
+        )}
       </main>
 
     </div>
