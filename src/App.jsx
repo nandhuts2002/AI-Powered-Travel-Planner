@@ -54,7 +54,7 @@ export default function App() {
   return (
     <div style={styles.app} className="hero-wrapper">
       {/* Universal Background */}
-      <img src="/hero_bg.png" alt="Hero Background" className="hero-bg" />
+      <img src={`${import.meta.env.BASE_URL}hero_bg.png`} alt="Hero Background" className="hero-bg" />
       <div className="hero-overlay"></div>
 
       {/* Universal Header */}
@@ -103,7 +103,7 @@ export default function App() {
 
             <div className="teaser-card">
               <div className="teaser-badge">Trips Planned</div>
-              <img src="/resort_thumb.png" alt="Tropical Resort" className="teaser-img" />
+              <img src={`${import.meta.env.BASE_URL}resort_thumb.png`} alt="Tropical Resort" className="teaser-img" />
               <div className="teaser-title">Your trip in minutes, not weeks.</div>
               <div className="teaser-desc">Plan your next trip with me and discover the world's hidden gems.</div>
               <div className="teaser-actions">
