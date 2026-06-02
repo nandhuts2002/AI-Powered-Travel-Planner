@@ -122,7 +122,7 @@ export default function App() {
               <div className="loader-ring" style={{ borderColor: 'rgba(255,255,255,0.2)', borderTopColor: '#fff', width: '60px', height: '60px', borderWidth: '4px' }} />
               <h2 style={{...styles.loadingTitle, color: '#fff', marginTop: '1rem'}}>Generating Itinerary</h2>
               <p style={{...styles.loadingSubtitle, color: 'rgba(255,255,255,0.8)'}}>
-                Consulting Gemini to design the ultimate schedule, local cuisine lists, and route maps...
+                Consulting AI to design the ultimate schedule, local cuisine lists, and route maps...
               </p>
               <div style={{...styles.loadingTips, background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)'}}>
                 <Sparkles size={16} color="#fff" />
